@@ -24,7 +24,7 @@
 
 # Global imports
 import string
-from events import Event
+from .events import Event
 
 class Line:
     """ Line of a GEDCOM file
@@ -132,14 +132,14 @@ class Line:
 
     def gedcom(self):
         """ Return GEDCOM code for this line and all of its sub-lines """
-        result = unicode(self)
+        result = str(self)
         for e in self.children_lines():
             result += '\n' + e.gedcom()
         return result
 
     def __str__(self):
         """ Format this line as its original string """
-        result = unicode(self.level())
+        result = str(self.level())
         if self.xref() != "":
             result += ' ' + self.xref()
         result += ' ' + self.tag()

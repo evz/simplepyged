@@ -28,7 +28,7 @@
 
 # Global imports
 import string
-from records import *
+from .records import *
 
 class Gedcom:
     """ Gedcom parser
@@ -109,14 +109,14 @@ class Gedcom:
     def _parse(self,file):
         # open file
         # go through the lines
-        f = open(file)
-        number = 1
-        for line in f.readlines():
-            self._parse_line(number,line.decode("utf-8-sig"))
-            number += 1
+        with open(file, 'r') as f:
+            number = 1
+            for line in f:
+                self._parse_line(number,line)
+                number += 1
 
-        for e in self.line_list():
-            e._init()
+            for e in self.line_list():
+                e._init()
 
     def _parse_line(self,number,line):
         # each line should have: Level SP (Xref SP)? Tag (SP Value)? (SP)? NL
@@ -224,12 +224,12 @@ class Gedcom:
         return head
 
     def _error(self,number,text):
-        error = "Gedcom format error on line " + unicode(number) + ': ' + text
+        error = "Gedcom format error on line " + str(number) + ': ' + text
         raise GedcomParseError(error)
 
     def _print(self):
         for e in self.line_list:
-            print string.join([unicode(e.level()),e.xref(),e.tag(),e.value()])
+            print(string.join([str(e.level()),e.xref(),e.tag(),e.value()]))
 
 
 class GedcomParseError(Exception):
